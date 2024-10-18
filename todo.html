@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
+    rel="stylesheet"
+    />
+</head>
+<body style="background-color:rgb(127, 155, 127); ;">
+    <div class ="container p-10 rounded">
+        <h1 style="color:rgb(230, 222, 222); font-size:3em;  
+        color: #d2e7be;  
+        text-align: center;  
+        text-shadow: 2px 2px 4px #e91313;  
+        margin: 20px 0;" class="text-center mb-4">Make your to-dos as list here :) </h3>
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-4 border p-5">
+                <div>
+                    <form id="todo-form">
+                        <input id="title-input" placeholder="Enter your todo" class="form-control" required><br>
+                        <input id="date_input" type="date" class="form-control"><br>
+                        <input id="time_input" type="time" class="form-control"><br>
+                        <div class="text-center">
+                            <button type="submit" class="mx-auto btn btn-white text-nowrap">Add TO-DO</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-12 col-md-8 col-lg-8 border rounded p-4" id="todo_list">
+            </div>
+        </div> 
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.umd.min.js"
+    ></script>
+    
+    <script>
+        var count = 1;
+
+        function add_todo(title, date_time) {
+            document.getElementById("todo_list").innerHTML += `
+                <div id="todo_${count}" class="todo-item my-2 p-4 bg-light border-light card">
+                    <div class="">
+                        <h4 style="float:left" class="m-0 p-0" id="todo-title-${count}">${title}</h4>
+                        <div style="float:right;">
+                            <i style="cursor:pointer;" onclick="edit_todo(${count})" class="fas fa-edit"></i>
+                            <i style="cursor:pointer;" onclick="del_todo(${count})" class="fas text-danger fa-trash delete-item"></i>
+                        </div>
+                    </div>
+                    <small class="text-muted" id="todo-date-${count}">${date_time}</small>
+                </div>
+            `;
+            count++;
+        }
+
+        function del_todo(id) {
+            $("#todo_" + id).fadeOut(function() {
+                $(this).remove();
+            });
+        }
+
+        function edit_todo(id) {
+            var current_title = document.getElementById("todo-title-" + id).innerText;
+            var current_date = document.getElementById("todo-date-" + id).innerText.split(" ")[0];
+            var current_time = document.getElementById("todo-date-" + id).innerText.split(" ")[1];
+
+            var new_title = prompt("Edit task:", current_title);
+            var new_date = prompt("Edit date (YYYY-MM-DD):", current_date);
+            var new_time = prompt("Edit time (HH:MM):", current_time);
+
+            if (new_title && new_date && new_time) {
+                document.getElementById("todo-title-" + id).innerText = new_title;
+                document.getElementById("todo-date-" + id).innerText = new_date + " " + new_time;
+            }
+        }
+
+        $("#todo-form").submit(function(event) {
+            event.preventDefault();
+
+            var title = document.getElementById("title-input").value;
+            var date = document.getElementById("date_input").value;
+            var time = document.getElementById("time_input").value;
+            var date_time = date + " " + time;
+
+            add_todo(title, date_time);
+
+            document.getElementById("todo-form").reset();
+        });
+    </script>
+</body>
+</html>
